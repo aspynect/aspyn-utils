@@ -43,7 +43,8 @@ async def sync(interaction: discord.Interaction):
 @app_commands.describe(game="Which UID?")
 @app_commands.choices(game=[
         app_commands.Choice(name="Genshin", value="609006374"),
-        app_commands.Choice(name="HSR", value="604969370")
+        app_commands.Choice(name="StarRail", value="604969370"),
+        app_commands.Choice(name="Bungie", value="aspyn#5311")
     ])
 async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
     if sus(interaction.user.id):
