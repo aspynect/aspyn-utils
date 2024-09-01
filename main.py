@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 import json
 import random
+import d20
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -35,6 +36,7 @@ async def sync(interaction: discord.Interaction):
         return
     await tree.sync()
     await interaction.response.send_message("sunk!", ephemeral = True)
+    print("Sunk!")
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
@@ -46,13 +48,52 @@ async def sync(interaction: discord.Interaction):
         app_commands.Choice(name="StarRail", value="604969370"),
         app_commands.Choice(name="Bungie", value="aspyn#5311")
     ])
+        #TODO add switch fc
 async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
     if sus(interaction.user.id):
         await interaction.response.send_message("impostor >:(", ephemeral = True)
         return
+    await interaction.response.send_message(game.value)
+    
 
 
-    await interaction.response.send_message(f"{game.value}")
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="roll",description="Roll Dice!")
+@app_commands.describe(dicestring="Dice Expression")
+async def roll(interaction: discord.Interaction, dicestring: str):
+    if sus(interaction.user.id):
+        await interaction.response.send_message("impostor >:(", ephemeral = True)
+        return
+    try:
+        result = str(d20.roll(dicestring))
+    except: 
+        await interaction.response.send_message("Invalid Expression", ephemeral = True)
+        return
+    await interaction.response.send_message(result)
+
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="rollchar",description="Roll a Character!")
+async def rollchar(interaction: discord.Interaction):
+    if sus(interaction.user.id):
+        await interaction.response.send_message("impostor >:(", ephemeral = True)
+        return
+    result = ""
+    for i in range(6):
+        result += f"{d20.roll("4d6rr1kh3")}\n"
+    await interaction.response.send_message(result)
+
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="rollhelp",description="Link to d20 docs")
+async def rollhelp(interaction: discord.Interaction):
+    if sus(interaction.user.id):
+        await interaction.response.send_message("impostor >:(", ephemeral = True)
+        return
+    await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
