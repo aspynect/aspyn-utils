@@ -179,7 +179,7 @@ async def ethics(interaction: discord.Interaction):
         "Never despair of God's mercy."
     ]
     number = random.randint(0, len(ethicsArray) - 1)
-    await interaction.response.send_message(f"{number + 1}: {ethicsArray[number]}")
+    await interaction.response.send_message(f"{number + 1}. {ethicsArray[number]}")
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
