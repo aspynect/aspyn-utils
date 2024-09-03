@@ -16,6 +16,7 @@ def sus(id):
     return False
 
 #TODO make an optional "visible" parameter on every command, default to ephemeral?
+#TODO unit conversions (ephemeral)
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -74,6 +75,38 @@ async def roll(interaction: discord.Interaction, dicestring: str):
         return
     await interaction.response.send_message(result)
 
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="temperature",description="Convert Temperatures")
+@app_commands.describe(input="Input amount and units (with a space)")
+async def roll(interaction: discord.Interaction, input: str):
+    if sus(interaction.user.id):
+        await interaction.response.send_message("impostor >:(", ephemeral = True)
+        return
+    
+    input.lower()
+    inputArray = input.split()
+    tempNum = float(inputArray[0])
+    tempUnit = inputArray[1]
+    if len(inputArray) < 2:
+        await interaction.response.send_message("Invalid Input! No spaces!", ephemeral = True)
+    tempInF = 0
+    match tempUnit:
+        case "f":
+            tempInF = tempNum
+        case "c":
+            tempInF = tempNum * 1.8 + 32
+        case _:
+            await interaction.response.send_message("Invalid Unit", ephemeral = True)
+            return
+    outputString = ""
+    outputString += f"{tempInF:.1f} Degrees Fahrenheit\n"
+    outputString += f"{(tempInF - 32) / 1.8:.1f} Degrees Celsius\n"
+    await interaction.response.send_message(outputString, ephemeral = True)
+
+
+    #await interaction.response.send_message(result)
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
