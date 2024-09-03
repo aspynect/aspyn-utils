@@ -16,6 +16,11 @@ def sus(id):
         return True
     return False
 
+async def vote(interaction: discord.Interaction):
+        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
+        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
+        await interaction.response.send_message(embed = embed, ephemeral = True)
+
 #TODO make an optional "visible" parameter on every command, default to ephemeral?
 #TODO unit conversions (ephemeral)
 
@@ -24,9 +29,7 @@ def sus(id):
 @tree.command(name="ping",description="ping")
 async def ping(interaction: discord.Interaction):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     await interaction.response.send_message("h", ephemeral = True)
 
@@ -36,9 +39,7 @@ async def ping(interaction: discord.Interaction):
 @tree.command(name="sync",description="sync")
 async def sync(interaction: discord.Interaction):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     await tree.sync()
     await interaction.response.send_message("sunk!", ephemeral = True)
@@ -60,9 +61,7 @@ async def sync(interaction: discord.Interaction):
 #TODO add switch fc
 async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     embed = discord.Embed(title = f"UID", color = myColor)
     embed.add_field(name = game.name, value = game.value)
@@ -76,9 +75,7 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
 @app_commands.describe(dicestring="Dice Expression")
 async def roll(interaction: discord.Interaction, dicestring: str):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     try:
         result = str(d20.roll(dicestring))
@@ -93,9 +90,7 @@ async def roll(interaction: discord.Interaction, dicestring: str):
 @tree.command(name="rollchar",description="Roll a Character!")
 async def rollchar(interaction: discord.Interaction):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     result = ""
     for i in range(6):
@@ -109,7 +104,7 @@ async def rollchar(interaction: discord.Interaction):
 @tree.command(name="rollhelp",description="Link to d20 docs")
 async def rollhelp(interaction: discord.Interaction):
     if sus(interaction.user.id):
-        await interaction.response.send_message("impostor >:(", ephemeral = True)
+        await vote(interaction)
         return
     await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
 
@@ -120,9 +115,7 @@ async def rollhelp(interaction: discord.Interaction):
 @app_commands.describe(input="Input amount and units (with a space)")
 async def roll(interaction: discord.Interaction, input: str):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     
     input.lower()
@@ -153,9 +146,7 @@ async def roll(interaction: discord.Interaction, input: str):
 @tree.command(name="ethics",description="Code of Ethics :3")
 async def ethics(interaction: discord.Interaction):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     ethicsArray = [
         "First of all, love the Lord God with your whole heart, your whole soul, and your whole strength.",
@@ -242,9 +233,7 @@ async def ethics(interaction: discord.Interaction):
 @tree.command(name="advice",description="Advice for Budding Streamers")
 async def advice(interaction: discord.Interaction):
     if sus(interaction.user.id):
-        embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        await vote(interaction)
         return
     adviceArray = [
         "Be kind and wholesome; positivity is inherently contagious.",
