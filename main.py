@@ -70,6 +70,7 @@ async def pronouns(interaction: discord.Interaction):
         app_commands.Choice(name="Honkai Star Rail", value="604969370"),
         app_commands.Choice(name="Valorant", value="aspyn#sheit"),
         app_commands.Choice(name="Steam", value="883076786"),
+        app_commands.Choice(name="Pokemon Go", value="545621393895"),
         app_commands.Choice(name="Bungie", value="aspyn#5311")
     ]
 )
