@@ -55,8 +55,7 @@ async def pronouns(interaction: discord.Interaction):
     if sus(interaction.user.id):
         await vote(interaction)
         return
-    embed = discord.Embed(title = "", color = myColor)
-    embed.add_field(name = "", value = "[**Pronouns**](https://en.pronouns.page/@aspyn)")
+    embed = discord.Embed(title = "Pronouns", color = myColor, url = "https://en.pronouns.page/@aspyn")
     embed.set_image(url = "https://cdn.discordapp.com/attachments/737796796255961241/1281445159879573524/aspyn-01J72K3YCGGQR00A1SX86E2SZ2-dark.png?ex=66dbbe4e&is=66da6cce&hm=2440fa01b412e26b964f1a0b520d8b95da9c637355cf8b269c971a827ab7be3a&")
     await interaction.response.send_message(embed = embed)
 
