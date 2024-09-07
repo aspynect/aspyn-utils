@@ -26,9 +26,11 @@ async def vote(interaction: discord.Interaction):
 async def snitch(interaction: discord.Interaction):
     aspynUser = await client.fetch_user(439441145466978305)
     embed = discord.Embed(title = "Impostor Alert", color = myColor)
-    embed.add_field(name = "Name", value = interaction.user.name)
-    embed.add_field(name = "ID", value = interaction.user.id)
+    embed.add_field(name = "Name", value = interaction.user.display_name)
+    embed.add_field(name = "user", value = interaction.user.name)
     embed.add_field(name = "Command", value = interaction.command.name)
+    embed.add_field(name = "ID", value = interaction.user.id)
+    embed.add_field(name = "Mention", value = f"<@{interaction.user.id}>")
     embed.set_image(url = interaction.user.avatar.url)
     await aspynUser.send(embed = embed)
 
