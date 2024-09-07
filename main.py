@@ -11,7 +11,7 @@ tree = app_commands.CommandTree(client)
 with open('secrets.json', 'r') as file:
     secrets = json.load(file)
 
-def sus(id):
+async def sus(id):
     if id not in [439441145466978305, 99801098088370176]:
         return True
     return False
@@ -20,6 +20,17 @@ async def vote(interaction: discord.Interaction):
         embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
         embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
         await interaction.response.send_message(embed = embed, ephemeral = True)
+        await snitch(interaction)
+
+
+async def snitch(interaction: discord.Interaction):
+    aspynUser = await client.fetch_user(439441145466978305)
+    embed = discord.Embed(title = "Impostor Alert", color = myColor)
+    embed.add_field(name = "Name", value = interaction.user.name)
+    embed.add_field(name = "ID", value = interaction.user.id)
+    embed.add_field(name = "Command", value = interaction.command.name)
+    embed.set_image(url = interaction.user.avatar.url)
+    await aspynUser.send(embed = embed)
 
 #TODO make an optional "visible" parameter on every command, default to ephemeral?
 #TODO unit conversions (ephemeral)
@@ -30,7 +41,7 @@ async def vote(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ping",description="ping")
 async def ping(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     await interaction.response.send_message("h", ephemeral = True)
@@ -40,7 +51,7 @@ async def ping(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="sync",description="sync")
 async def sync(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     await tree.sync()
@@ -52,7 +63,7 @@ async def sync(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="pronouns",description="Pronouns... woke")
 async def pronouns(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     embed = discord.Embed(title = "Pronouns", color = myColor, url = "https://en.pronouns.page/@aspyn")
@@ -75,7 +86,7 @@ async def pronouns(interaction: discord.Interaction):
 )
 #TODO add switch fc
 async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     embed = discord.Embed(title = f"UID", color = myColor)
@@ -89,7 +100,7 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
 @tree.command(name="roll",description="Roll Dice!")
 @app_commands.describe(dicestring="Dice Expression")
 async def roll(interaction: discord.Interaction, dicestring: str):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     try:
@@ -104,7 +115,7 @@ async def roll(interaction: discord.Interaction, dicestring: str):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="rollchar",description="Roll a Character!")
 async def rollchar(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     result = ""
@@ -118,7 +129,7 @@ async def rollchar(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="rollhelp",description="Link to d20 docs")
 async def rollhelp(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
@@ -129,7 +140,7 @@ async def rollhelp(interaction: discord.Interaction):
 @tree.command(name="temperature",description="Convert Temperatures")
 @app_commands.describe(input="Input amount and units (with a space)")
 async def roll(interaction: discord.Interaction, input: str):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     
@@ -160,7 +171,7 @@ async def roll(interaction: discord.Interaction, input: str):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ethics",description="Code of Ethics :3")
 async def ethics(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     ethicsArray = [
@@ -247,7 +258,7 @@ async def ethics(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="advice",description="Advice for Budding Streamers")
 async def advice(interaction: discord.Interaction):
-    if sus(interaction.user.id):
+    if await sus(interaction.user.id):
         await vote(interaction)
         return
     adviceArray = [
