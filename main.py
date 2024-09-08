@@ -39,6 +39,22 @@ async def snitch(interaction: discord.Interaction):
 #TODO randomize impostor color and match embed
 #TODO myanimelist and doesthedogdie?
 
+class CounterButton(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+        self.counter = 0
+
+    @discord.ui.button(label = "- 1")
+    async def subButton(self, interaction: discord.Interaction, button:discord.ui.Button):
+        self.counter -= 1
+        await interaction.response.edit_message(content = self.counter)
+
+    @discord.ui.button(label = "+ 1")
+    async def addButton(self, interaction: discord.Interaction, button:discord.ui.Button):
+        self.counter += 1
+        await interaction.response.edit_message(content = self.counter)
+
+
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ping",description="ping")
@@ -47,6 +63,16 @@ async def ping(interaction: discord.Interaction):
         await vote(interaction)
         return
     await interaction.response.send_message("h", ephemeral = True)
+
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="counter",description="counter")
+async def counter(interaction: discord.Interaction):
+    if await sus(interaction.user.id):
+        await vote(interaction)
+        return
+    await interaction.response.send_message("0", ephemeral = True, view = CounterButton())
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
