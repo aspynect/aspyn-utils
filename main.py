@@ -3,6 +3,42 @@ from discord import app_commands
 import json
 import random
 import d20
+import requests
+
+class Anime():
+    def __init__(self):
+        self.animeInfo = self.getAnimeList()
+    
+    def getAnimeList(self):
+        response = requests.get("https://api.myanimelist.net/v2/users/aspynect/animelist?status=completed&sort=list_score&limit=25&fields=id,title,mean,main_picture,list_status,alternative_titles", headers = {'X-MAL-CLIENT-ID': secrets["mal-token"]})
+        response.raise_for_status()
+        anime_list = response.json()
+        response.close()
+        print(anime_list)
+        animeList = anime_list['data']
+        optionsList = []
+        for index in range(len(animeList)):
+            anime = animeList[index]["node"]
+            optionsList.append(discord.SelectOption(label = anime['title'], value = index, description = anime['alternative_titles']['en']))
+        return [animeList, optionsList]
+
+    def embed(self, anime):
+        animeNode = anime["node"]
+        embed = discord.Embed(title = animeNode["title"], color = myColor, url = f"https://myanimelist.net/anime/{animeNode['id']}")
+        embed.add_field(name = "EN Title", value = animeNode["alternative_titles"]["en"])
+        embed.add_field(name = "Mean Rating", value = animeNode["mean"])
+        embed.add_field(name = "My Rating", value = anime["list_status"]["score"])
+        embed.set_image(url = animeNode["main_picture"]["large"])
+        return embed
+    
+    def embedTwo(self, index):
+        anime = self.getAnime(index)
+        return self.embed(anime)
+    
+    def getAnime(self, index):
+        anime = self.animeInfo[0][int(index)]
+        return anime
+
 
 myColor = discord.Color.from_rgb(r=255, g=0, b=255)
 intents = discord.Intents.default()
@@ -10,6 +46,8 @@ client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 with open('secrets.json', 'r') as file:
     secrets = json.load(file)
+animeThings = Anime()
+
 
 async def sus(id):
     if id not in [439441145466978305, 99801098088370176]:
@@ -35,9 +73,22 @@ async def snitch(interaction: discord.Interaction):
     await aspynUser.send(embed = embed)
 
 #TODO make an optional "visible" parameter on every command, default to ephemeral?
-#TODO unit conversions (ephemeral)
-#TODO randomize impostor color and match embed
-#TODO myanimelist and doesthedogdie?
+#TODO currency conversions (ephemeral)
+#TODO doesthedogdie?
+
+#TODO finish this with myanimelist stuff - populate options from my list, sorted by rating, then build embeds for each when selected?
+#TODO what the fuck im so lost
+
+class AnimeSelector(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+
+    @discord.ui.select(placeholder = "Select an anime", options = animeThings.animeInfo[1], max_values=1)
+    async def animeSelector(self, interaction: discord.Interaction, select: discord.ui.Select):
+        anime = select.values[0]
+        embed = animeThings.embedTwo(anime)
+        await interaction.response.edit_message(embed = embed)
+
 
 class CounterButton(discord.ui.View):
     def __init__(self):
@@ -73,6 +124,22 @@ async def counter(interaction: discord.Interaction):
         await vote(interaction)
         return
     await interaction.response.send_message("0", ephemeral = True, view = CounterButton())
+
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="anime",description="My Anime List")
+async def anime(interaction: discord.Interaction):
+    if await sus(interaction.user.id):
+        await vote(interaction)
+        return
+    #TODO make this match the actual output later
+    embed = discord.Embed(title = "Shigatsu wa Kimi no Uso", color = myColor, url = "https://myanimelist.net/anime/23273")
+    embed.add_field(name = "EN Title", value = "Your Lie in April")
+    embed.add_field(name = "Mean Rating", value = "8.64")
+    embed.add_field(name = "My Rating", value = "10")
+    embed.set_image(url = "https://cdn.myanimelist.net/images/anime/1405/143284l.webp")
+    await interaction.response.send_message(embed = embed, ephemeral = False, view = AnimeSelector())
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
@@ -339,5 +406,4 @@ async def advice(interaction: discord.Interaction):
 @client.event
 async def on_ready():
     print("Ready!")
-
 client.run(secrets["token"])
