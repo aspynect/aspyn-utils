@@ -76,9 +76,6 @@ async def snitch(interaction: discord.Interaction):
 #TODO currency conversions (ephemeral)
 #TODO doesthedogdie?
 
-#TODO finish this with myanimelist stuff - populate options from my list, sorted by rating, then build embeds for each when selected?
-#TODO what the fuck im so lost
-
 class AnimeSelector(discord.ui.View):
     def __init__(self):
         super().__init__()
@@ -133,7 +130,6 @@ async def anime(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
-    #TODO make this match the actual output later
     embed = discord.Embed(title = "Shigatsu wa Kimi no Uso", color = myColor, url = "https://myanimelist.net/anime/23273")
     embed.add_field(name = "EN Title", value = "Your Lie in April")
     embed.add_field(name = "Mean Rating", value = "8.64")
