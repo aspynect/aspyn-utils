@@ -91,11 +91,19 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
-    embed = discord.Embed(title = f"UID", color = myColor)
+    embed = discord.Embed(title = "UID", color = myColor)
     embed.add_field(name = game.name, value = game.value)
     await interaction.response.send_message(embed = embed)
-    
 
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="pfp",description="Get PFP")
+@app_commands.describe(user="Whose PFP?")
+async def pfp(interaction: discord.Interaction, user: discord.User):
+    embed = discord.Embed(title = "PFP", color = myColor)
+    embed.set_image(url = user.avatar.url)
+    await interaction.response.send_message(embed = embed, ephemeral = True)
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
