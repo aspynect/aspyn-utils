@@ -24,8 +24,7 @@ class Anime():
 
     def embed(self, anime):
         animeNode = anime["node"]
-        embed = discord.Embed(title = animeNode["title"], color = myColor, url = f"https://myanimelist.net/anime/{animeNode['id']}")
-        embed.add_field(name = "EN Title", value = animeNode["alternative_titles"]["en"])
+        embed = discord.Embed(title = animeNode["title"], description = animeNode["alternative_titles"]["en"], color = myColor, url = f"https://myanimelist.net/anime/{animeNode['id']}")
         embed.add_field(name = "Mean Rating", value = animeNode["mean"])
         embed.add_field(name = "My Rating", value = anime["list_status"]["score"])
         embed.set_image(url = animeNode["main_picture"]["large"])
@@ -130,8 +129,7 @@ async def anime(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
-    embed = discord.Embed(title = "Shigatsu wa Kimi no Uso", color = myColor, url = "https://myanimelist.net/anime/23273")
-    embed.add_field(name = "EN Title", value = "Your Lie in April")
+    embed = discord.Embed(title = "Shigatsu wa Kimi no Uso", description = "Your Lie in April", color = myColor, url = "https://myanimelist.net/anime/23273")
     embed.add_field(name = "Mean Rating", value = "8.64")
     embed.add_field(name = "My Rating", value = "10")
     embed.set_image(url = "https://cdn.myanimelist.net/images/anime/1405/143284l.webp")
@@ -180,8 +178,7 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
-    embed = discord.Embed(title = "UID", color = myColor)
-    embed.add_field(name = game.name, value = game.value)
+    embed = discord.Embed(title = f"{game.name} UID", description = game.value, color = myColor)
     await interaction.response.send_message(embed = embed)
 
 
@@ -190,7 +187,7 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
 @tree.command(name="pfp",description="Get PFP")
 @app_commands.describe(user="Whose PFP?")
 async def pfp(interaction: discord.Interaction, user: discord.User):
-    embed = discord.Embed(title = "PFP", color = myColor)
+    embed = discord.Embed(title = f"{user.name}'s PFP", color = myColor)
     embed.set_image(url = user.avatar.url)
     await interaction.response.send_message(embed = embed, ephemeral = True)
 
@@ -261,8 +258,7 @@ async def roll(interaction: discord.Interaction, input: str):
     outputString = ""
     outputString += f"{tempInF:.1f} Degrees Fahrenheit\n"
     outputString += f"{(tempInF - 32) / 1.8:.1f} Degrees Celsius\n"
-    embed = discord.Embed(title = "Temperature Conversion", color = myColor)
-    embed.add_field(name = "", value = outputString)
+    embed = discord.Embed(title = "Temperature Conversion", description = outputString, color = myColor)
     await interaction.response.send_message(embed = embed, ephemeral = True)
 
 
@@ -348,8 +344,7 @@ async def ethics(interaction: discord.Interaction):
         "Never despair of God's mercy."
     ]
     number = random.randint(0, len(ethicsArray) - 1)
-    embed = discord.Embed(title = "Ethics", color = myColor)
-    embed.add_field(name = f"{number + 1}.", value = ethicsArray[number])
+    embed = discord.Embed(title = f"{number + 1}.", description = ethicsArray[number], color = myColor)
     await interaction.response.send_message(embed = embed)
 
 
@@ -395,8 +390,7 @@ async def advice(interaction: discord.Interaction):
         "Release your complete tax returns and long-form birth certificate on stream so the audience knows you're a red-blooded American."
     ]
     number = random.randint(0, len(adviceArray) - 1)
-    embed = discord.Embed(title = "Advice", color = myColor)
-    embed.add_field(name = f"{number + 1}.", value = adviceArray[number])
+    embed = discord.Embed(title = f"{number + 1}.", description = adviceArray[number], color = myColor)
     await interaction.response.send_message(embed = embed)
 
 @client.event
