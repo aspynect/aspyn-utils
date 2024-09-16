@@ -14,7 +14,6 @@ class Anime():
         response.raise_for_status()
         anime_list = response.json()
         response.close()
-        print(anime_list)
         animeList = anime_list['data']
         optionsList = []
         for index in range(len(animeList)):
@@ -46,6 +45,7 @@ tree = app_commands.CommandTree(client)
 with open('secrets.json', 'r') as file:
     secrets = json.load(file)
 animeThings = Anime()
+headmatesList = ["aspyn", "Cassie", "Shane", "Ruth", "nea", "Pearl"]
 
 
 async def sus(id):
@@ -55,8 +55,8 @@ async def sus(id):
 
 async def vote(interaction: discord.Interaction):
         embed = discord.Embed(title = "impostor >:(", color = discord.Color.red())
-        embed.set_image(url="https://static.wikia.nocookie.net/mcleodgaming/images/f/fa/Crewmate.png/revision/latest?cb=20230119035540")
-        await interaction.response.send_message(embed = embed, ephemeral = True)
+        embed.set_image(url="attachment://sus.webp")
+        await interaction.response.send_message(embed = embed, ephemeral = True, file = discord.File('assets/sus.webp'))
         await snitch(interaction)
 
 
@@ -102,6 +102,48 @@ class CounterButton(discord.ui.View):
         await interaction.response.edit_message(content = self.counter)
 
 
+#TODO get the rest of the images off my pc and into assets
+class SystemViews(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+        self.imageIndex = 0
+        with open('system.json', 'r') as file:
+            self.infoDict = json.load(file)
+        self.currentMember = ""
+
+    async def buildAndSend(self, interaction: discord.Interaction):
+        member = self.infoDict[self.currentMember]
+        embed = discord.Embed(color = myColor, title = f"{self.currentMember} • {member["pronouns"]}")
+        embed.description = member["bio"]
+        embed.set_image(url = "attachment://image.webp")
+        embed.set_footer(text = f"Image {self.imageIndex + 1}/{len(member["images"])}")
+        await interaction.response.edit_message(embed = embed, attachments = [discord.File(member["images"][self.imageIndex], filename = "image.webp")])
+
+    @discord.ui.select(placeholder = "Select a headmate", options = [discord.SelectOption(label = headmatesList[i], value = i) for i in range(len(headmatesList))], max_values=1)
+    async def headmateSelector(self, interaction: discord.Interaction, select: discord.ui.Select):
+        self.imageIndex = 0
+        self.currentMember = headmatesList[int(select.values[0])]
+        await self.buildAndSend(interaction)
+
+    @discord.ui.button(label = "←")
+    async def prevButton(self, interaction: discord.Interaction, button:discord.ui.Button):
+        if not self.currentMember:
+            await interaction.response.send_message("Please select a headmate first.", ephemeral = True)
+            return
+        memberImages = self.infoDict[self.currentMember]["images"]
+        self.imageIndex = (self.imageIndex - 1) % len(memberImages)
+        await self.buildAndSend(interaction)
+
+    @discord.ui.button(label = "→")
+    async def addButton(self, interaction: discord.Interaction, button:discord.ui.Button):
+        if not self.currentMember:
+            await interaction.response.send_message("Please select a headmate first.", ephemeral = True)
+            return
+        memberImages = self.infoDict[self.currentMember]["images"]
+        self.imageIndex = (self.imageIndex + 1) % len(memberImages)
+        await self.buildAndSend(interaction)
+
+
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ping",description="ping")
@@ -134,6 +176,19 @@ async def anime(interaction: discord.Interaction):
     embed.add_field(name = "My Rating", value = "10")
     embed.set_image(url = "https://cdn.myanimelist.net/images/anime/1405/143284l.webp")
     await interaction.response.send_message(embed = embed, ephemeral = False, view = AnimeSelector())
+
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="system",description="My System!")
+async def system(interaction: discord.Interaction):
+    if await sus(interaction.user.id):
+        await vote(interaction)
+        return
+    embed = discord.Embed(title = "Pearlescence System", description = "Welcome to my system index! Use the dropdown below to select a headmate, and the buttons to flip through their images!\nQuestions are more than welcome, please don't be scared to ask!\nNote: Messages by any member other than aspyn will be proxy tagged with the first letter of their name.", color = myColor)
+    embed.add_field(name = "Resources", value = "[More Than One](<https://morethanone.info/>)\n[Pluralpedia](<https://pluralpedia.org/w/Plurality>)")
+    await interaction.response.send_message(embed = embed, view = SystemViews())
+
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
@@ -171,9 +226,9 @@ async def pronouns(interaction: discord.Interaction):
         app_commands.Choice(name="Steam", value="883076786"),
         app_commands.Choice(name="Pokemon Go", value="545621393895"),
         app_commands.Choice(name="Bungie", value="aspyn#5311")
+        #TODO add switch fc
     ]
 )
-#TODO add switch fc
 async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -229,6 +284,17 @@ async def rollhelp(interaction: discord.Interaction):
         await vote(interaction)
         return
     await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
+
+
+#TODO make this work lmao 
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.context_menu(name="fixfiles")
+async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
+    if await sus(interaction.user.id):
+        await vote(interaction)
+        return
+    await interaction.response.send_message(files=[await f.to_file() for f in message.attachments], ephemeral = True)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)

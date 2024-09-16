@@ -1,0 +1,49 @@
+{
+    "aspyn": {
+        "pronouns": "she/it",
+        "bio": "**Host**\nComputer lover and notable homosexual. Currently studying computer science and trying to live life. Loves playing games and writing fanfiction in her free time.\nMajority fronting time for most of body's life.\nOwner of all related accounts.\nUntagged messages can be assumed to be attributed to her unless otherwise stated. \nSpawned in the original split, along with Cassie.",
+        "images": [
+            "assets/system/aspyn1.webp",
+            "assets/system/aspyn2.webp",
+            "assets/system/aspyn3.webp",
+            "assets/system/aspyn4.webp",
+            "assets/system/aspyn5.webp",
+            "assets/system/aspyn6.webp",
+            "assets/system/aspyn7.webp"
+        ]
+    }, 
+    "Cassie": {
+        "pronouns": "they/them",
+        "bio": "**Caretaker**\nConfident and loving, they love talking to aspyn's friends and making fun of aspyn. In headspace, loves watching what aspyn does, along with taking care of and raising nea and Shane. Has some ability to read the others' minds and understand them without being directly communicated with. \nSpawned in the original split, along with aspyn.",
+        "images": [
+            "assets/system/cassie1.webp",
+            "assets/system/cassie2.webp"
+        ]
+    }, 
+    "Shane": {
+        "pronouns": "he/him",
+        "bio": "**Little Brother**\n*Minor, please treat as such*\nPassionate and excited, he's learning how to live and exploring what it's like to live. Practically stuck to Cassie's side, he loves co-fronting with them and getting to talk to people and make friends.\nBirthday: January 15th. Spawned in 2023",
+        "images": [
+            "assets/system/shane1.webp",
+            "assets/system/shane2.webp"
+        ]
+    }, 
+    "Ruth": {
+        "pronouns": "they/she",
+        "bio": "Loves birds. Favorite bird is the Great-Eared Nightjar. Formerly a 'persecutor', has been laying low and observing since the Incident.\nSpawn date: unknown. Some time after aspyn and Cassie, but before Shane.",
+        "images": ["assets/system/ruth1.webp"]
+    }, 
+    "nea": {
+        "pronouns": "it/she",
+        "bio": "**kity :3**\nJust a cat. it loves headpats and cuddles and good old fashion love. Only knows how to communicate in meow-like phrases.\nSpawn date: unknown. Some time after aspyn and Cassie, but before Shane.",
+        "images": ["assets/system/nea1.webp"]
+    }, 
+    "Pearl": {
+        "pronouns": "she/her",
+        "bio": "**Former Host**\nBorn in the body, lived as a singlet until ~5 years of age. \nCause of traumagenesis unknown. \nAfter the Original Split, left aspyn as the host and Cassie as a caretaker, and took the form of a butterfly. Does not communicate in any concrete fashion, but often will present herself as a reminder of why we keep living.",
+        "images": [
+            "assets/system/pearl1.webp",
+            "assets/system/pearl2.webp"
+        ]
+    }
+}
