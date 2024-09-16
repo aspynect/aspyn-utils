@@ -102,7 +102,6 @@ class CounterButton(discord.ui.View):
         await interaction.response.edit_message(content = self.counter)
 
 
-#TODO get the rest of the images off my pc and into assets
 class SystemViews(discord.ui.View):
     def __init__(self):
         super().__init__()
