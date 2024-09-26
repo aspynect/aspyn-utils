@@ -57,6 +57,7 @@ async def vote(interaction: discord.Interaction):
         await interaction.response.send_message(embed = embed, ephemeral = True, file = discord.File('assets/sus.webp'))
         await snitch(interaction)
 
+
 async def snitch(interaction: discord.Interaction):
     aspynUser = await client.fetch_user(439441145466978305)
     embed = discord.Embed(title = "Impostor Alert", color = myColor)
@@ -143,7 +144,7 @@ class SystemViews(discord.ui.View):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="ping", description="ping")
+@tree.command(name="ping",description="ping")
 async def ping(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -153,7 +154,7 @@ async def ping(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="counter", description="counter")
+@tree.command(name="counter",description="counter")
 async def counter(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -163,7 +164,7 @@ async def counter(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="anime", description="My Anime List")
+@tree.command(name="anime",description="My Anime List")
 async def anime(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -177,7 +178,7 @@ async def anime(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="system", description="My System!")
+@tree.command(name="system",description="My System!")
 async def system(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -187,10 +188,9 @@ async def system(interaction: discord.Interaction):
     await interaction.response.send_message(embed = embed, view = SystemViews())
 
 
-
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="sync", description="sync")
+@tree.command(name="sync",description="sync")
 async def sync(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -202,7 +202,7 @@ async def sync(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="pronouns", description="Pronouns... woke")
+@tree.command(name="pronouns",description="Pronouns... woke")
 async def pronouns(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -214,7 +214,7 @@ async def pronouns(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="uid", description="Send UID")
+@tree.command(name="uid",description="Send UID")
 @app_commands.describe(game="Which UID?")
 @app_commands.choices(game=[
         app_commands.Choice(name="Genshin", value="609006374"),
@@ -236,7 +236,7 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="pfp", description="Get PFP")
+@tree.command(name="pfp",description="Get PFP")
 @app_commands.describe(user="Whose PFP?")
 async def pfp(interaction: discord.Interaction, user: discord.User):
     embed = discord.Embed(title = f"{user.name}'s PFP", color = myColor)
@@ -245,7 +245,7 @@ async def pfp(interaction: discord.Interaction, user: discord.User):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="roll", description="Roll Dice!")
+@tree.command(name="roll",description="Roll Dice!")
 @app_commands.describe(dicestring="Dice Expression")
 async def roll(interaction: discord.Interaction, dicestring: str):
     if await sus(interaction.user.id):
@@ -261,7 +261,7 @@ async def roll(interaction: discord.Interaction, dicestring: str):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="rollchar", description="Roll a Character!")
+@tree.command(name="rollchar",description="Roll a Character!")
 async def rollchar(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -272,10 +272,9 @@ async def rollchar(interaction: discord.Interaction):
     await interaction.response.send_message(result)
 
 
-
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="rollhelp", description="Link to d20 docs")
+@tree.command(name="rollhelp",description="Link to d20 docs")
 async def rollhelp(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -296,7 +295,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="temperature", description="Convert Temperatures")
+@tree.command(name="temperature",description="Convert Temperatures")
 @app_commands.describe(input="Input amount and units (with a space)")
 async def roll(interaction: discord.Interaction, input: str):
     if await sus(interaction.user.id):
@@ -327,7 +326,7 @@ async def roll(interaction: discord.Interaction, input: str):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="ethics", description="Code of Ethics :3")
+@tree.command(name="ethics",description="Code of Ethics :3")
 async def ethics(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
@@ -413,7 +412,7 @@ async def ethics(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.command(name="advice", description="Advice for Budding Streamers")
+@tree.command(name="advice",description="Advice for Budding Streamers")
 async def advice(interaction: discord.Interaction):
     if await sus(interaction.user.id):
         await vote(interaction)
