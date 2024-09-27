@@ -4,6 +4,9 @@ import json
 import random
 import d20
 import requests
+from PIL import Image
+import pillow_avif
+from io import BytesIO
 
 myColor = discord.Color.from_rgb(r=255, g=0, b=255)
 intents = discord.Intents.default()
@@ -282,15 +285,27 @@ async def rollhelp(interaction: discord.Interaction):
     await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
 
 
-#TODO make this work lmao 
+#TODO make this work with videos/audio lmao 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.context_menu(name="fixfiles")
-async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
+@tree.context_menu(name="fiximages")
+async def fiximages(interaction: discord.Interaction,  message: discord.Message):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
-    await interaction.response.send_message(files=[await f.to_file() for f in message.attachments], ephemeral = True)
+    
+    images = []
+    for attachment in message.attachments:
+        file = await attachment.read()
+        with BytesIO(file) as image_binary:
+                    with Image.open(image_binary) as img:
+                        img = img.convert("RGBA")
+                        with BytesIO() as output_buffer:
+                            img.save(output_buffer, format="PNG")
+                            output_buffer.seek(0)
+                            discord_file = discord.File(fp=output_buffer, filename="converted_image.png")
+                            images.append(discord_file)
+    await interaction.response.send_message(files = images)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
