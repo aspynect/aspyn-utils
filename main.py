@@ -294,6 +294,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
         await vote(interaction)
         return
     
+    await interaction.response.defer()
     images = []
     for attachment in message.attachments:
         file = await attachment.read()
@@ -305,7 +306,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
                             output_buffer.seek(0)
                             discord_file = discord.File(fp=output_buffer, filename="converted_image.png")
                             images.append(discord_file)
-    await interaction.response.send_message(files = images)
+    await interaction.followup.send(files = images)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
