@@ -288,8 +288,8 @@ async def rollhelp(interaction: discord.Interaction):
 #TODO make this work with videos/audio lmao 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.context_menu(name="fiximages")
-async def fiximages(interaction: discord.Interaction,  message: discord.Message):
+@tree.context_menu(name="fixfiles")
+async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
