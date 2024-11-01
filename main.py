@@ -144,6 +144,7 @@ class SystemViews(discord.ui.View):
         self.imageIndex = (self.imageIndex + 1) % len(memberImages)
         await self.buildAndSend(interaction)
 
+#TODO Check SRC queues - length, date of oldest run?
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
@@ -225,6 +226,7 @@ async def pronouns(interaction: discord.Interaction):
         app_commands.Choice(name="Valorant", value="aspyn#sheit"),
         app_commands.Choice(name="Steam", value="883076786"),
         app_commands.Choice(name="Pokemon Go", value="545621393895"),
+        app_commands.Choice(name="Pokemon TCG Pocket", value="6220292429679699"),
         app_commands.Choice(name="Bungie", value="aspyn#5311")
         #TODO add switch fc
     ]
