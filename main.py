@@ -7,6 +7,9 @@ import requests
 from PIL import Image
 import pillow_avif
 from io import BytesIO
+from os import path
+from subprocess import run, PIPE
+
 
 myColor = discord.Color.from_rgb(r=255, g=0, b=255)
 intents = discord.Intents.default()
@@ -298,18 +301,37 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     
     await interaction.response.defer()
     images = []
-    for attachment in message.attachments:
-        file = await attachment.read()
-        with BytesIO(file) as image_binary:
-                    with Image.open(image_binary) as img:
-                        img = img.convert("RGBA")
-                        with BytesIO() as output_buffer:
-                            img.save(output_buffer, format="PNG")
-                            output_buffer.seek(0)
-                            discord_file = discord.File(fp=output_buffer, filename="converted_image.png")
-                            images.append(discord_file)
-    await interaction.followup.send(files = images)
+    extension = ""
+    hardware = path.isfile("/dev/dri/renderD128")
 
+    params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h=min(720,iw):format=nv12", "-c:v", "h264_vaapi"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:min(720,iw)"]
+
+    for attachment in message.attachments:
+        print(attachment.content_type)
+        match attachment.content_type.split("/")[0]:
+            case "image":
+                if attachment.content_type.split("/")[1] == "gif":
+                    continue
+                command = ["ffmpeg", "-i", "pipe:0", "-f", "image2", "pipe:1"]
+                extension = "jpg"
+            case "video":
+                command = ["ffmpeg", "-i", "pipe:0", *params, "-c:a", "aac", "-pix_fmt", "yuv420p", "-movflags", "frag_keyframe+empty_moov+faststart", "-f", "mp4", "pipe:1"]
+                extension = "mp4"
+            case "audio":
+                command = ["ffmpeg", "-i", "pipe:0", "-loop", "1", "-r", "10", "-i", "assets/sus.webp", "-shortest", *params, "-c:a", "aac", "-pix_fmt", "yuv420p", "-movflags", "frag_keyframe+empty_moov+faststart", "-f", "mp4", "pipe:1"]
+                extension = "mp4"
+            case _:
+                continue
+
+        attachment_data = await attachment.read()
+        process = run(command, input = attachment_data, stdout = PIPE, stderr = PIPE)
+        if process.returncode == 0:
+            discord_file = discord.File(fp = BytesIO(process.stdout), filename = f"{attachment.filename.split(".")[0]}.{extension}")
+            images.append(discord_file)
+    if len(images) > 0:
+        await interaction.followup.send(files = images)
+    else:
+        await interaction.followup.send("No files to fix")
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
