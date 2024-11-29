@@ -305,7 +305,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     hardware = path.exists("/dev/dri/renderD128")
     print(hardware)
 
-    params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h='min(720,iw)':format=nv12", "-c:v", "h264_vaapi"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:'min(720,iw)'"]
+    params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h='min(720,iw)':format=nv12", "-c:v", "h264_vaapi", "-b:v", "1M"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:'min(720,iw)'"]
 
     for attachment in message.attachments:
         print(attachment.content_type)
