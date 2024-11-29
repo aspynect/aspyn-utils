@@ -290,7 +290,6 @@ async def rollhelp(interaction: discord.Interaction):
     await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
 
 
-#TODO make this work with videos/audio lmao 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.context_menu(name="fixfiles")
