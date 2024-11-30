@@ -4,8 +4,6 @@ import json
 import random
 import d20
 import requests
-from PIL import Image
-import pillow_avif
 from io import BytesIO
 from os import path
 from subprocess import run, PIPE
