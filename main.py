@@ -299,9 +299,14 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h='min(720,iw)':format=nv12", "-c:v", "h264_vaapi", "-b:v", "1M"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:'min(720,iw)'"]
 
     for attachment in message.attachments:
-        match attachment.content_type.split("/")[0]:
+        contentType = "image" # default to image if not type to try i guess??? cinny asked me to
+        contentExtension = "png"
+        if attachment.content_type:
+            contentType = attachment.content_type.split("/")[0]
+            contentExtension = attachment.content_type.split("/")[1]
+        match contentType:
             case "image":
-                if attachment.content_type.split("/")[1] == "gif":
+                if contentExtension == "gif":
                     continue
                 command = ["ffmpeg", "-i", "pipe:0", "-f", "image2", "pipe:1"]
                 extension = "jpg"
