@@ -292,10 +292,6 @@ async def rollhelp(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.context_menu(name="fixfiles")
 async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
-    
     await interaction.response.defer()
     images = []
     extension = ""
