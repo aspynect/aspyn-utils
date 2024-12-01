@@ -7,6 +7,7 @@ import requests
 from io import BytesIO
 from os import path
 from subprocess import run, PIPE
+import magic
 
 
 myColor = discord.Color.from_rgb(r=255, g=0, b=255)
@@ -294,16 +295,15 @@ async def rollhelp(interaction: discord.Interaction):
 async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     await interaction.response.defer()
     images = []
-    extension = ""
     hardware = path.exists("/dev/dri/renderD128")
     params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h='min(720,iw)':format=nv12", "-c:v", "h264_vaapi", "-b:v", "1M"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:'min(720,iw)'"]
 
     for attachment in message.attachments:
-        contentType = "image" # default to image if not type to try i guess??? cinny asked me to
-        contentExtension = "png"
-        if attachment.content_type:
-            contentType = attachment.content_type.split("/")[0]
-            contentExtension = attachment.content_type.split("/")[1]
+        extension = ""
+        attachment_data = await attachment.read()
+        mime = magic.from_buffer(attachment_data, mime = True).split("/")
+        contentType = mime[0]
+        contentExtension = mime[1]
         match contentType:
             case "image":
                 if contentExtension == "gif":
@@ -319,7 +319,6 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
             case _:
                 continue
 
-        attachment_data = await attachment.read()
         process = run(command, input = attachment_data, stdout = PIPE)
         if process.returncode == 0:
             discord_file = discord.File(fp = BytesIO(process.stdout), filename = f"{attachment.filename.split(".")[0]}.{extension}")
