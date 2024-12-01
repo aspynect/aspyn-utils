@@ -152,9 +152,6 @@ class SystemViews(discord.ui.View):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ping",description="ping")
 async def ping(interaction: discord.Interaction):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     await interaction.response.send_message("h", ephemeral = True)
 
 
@@ -162,9 +159,6 @@ async def ping(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="counter",description="counter")
 async def counter(interaction: discord.Interaction):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     await interaction.response.send_message("0", ephemeral = True, view = CounterButton())
 
 
@@ -255,9 +249,6 @@ async def pfp(interaction: discord.Interaction, user: discord.User):
 @tree.command(name="roll",description="Roll Dice!")
 @app_commands.describe(dicestring="Dice Expression")
 async def roll(interaction: discord.Interaction, dicestring: str):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     try:
         result = str(d20.roll(dicestring))
     except: 
@@ -270,9 +261,6 @@ async def roll(interaction: discord.Interaction, dicestring: str):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="rollchar",description="Roll a Character!")
 async def rollchar(interaction: discord.Interaction):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     result = ""
     for i in range(6):
         result += f"{d20.roll("4d6rr1kh3")}\n"
@@ -333,10 +321,6 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
 @tree.command(name="temperature",description="Convert Temperatures")
 @app_commands.describe(input="Input amount and units (with a space)")
 async def roll(interaction: discord.Interaction, input: str):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
-    
     input.lower()
     inputArray = input.split()
     tempNum = float(inputArray[0])
@@ -363,9 +347,6 @@ async def roll(interaction: discord.Interaction, input: str):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ethics",description="Code of Ethics :3")
 async def ethics(interaction: discord.Interaction):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     ethicsArray = [
         "First of all, love the Lord God with your whole heart, your whole soul, and your whole strength.",
         "Then, love your neighbor as yourself.",
@@ -449,9 +430,6 @@ async def ethics(interaction: discord.Interaction):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="advice",description="Advice for Budding Streamers")
 async def advice(interaction: discord.Interaction):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     adviceArray = [
         "Be kind and wholesome; positivity is inherently contagious.",
         "Be yourself, but be measured: people want authenticity, but too much feels like therapy.",
