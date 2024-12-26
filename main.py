@@ -421,7 +421,7 @@ async def ethics(interaction: discord.Interaction):
         "Make peace with your adversary before the sun sets.",
         "Never despair of God's mercy."
     ]
-    number = random.randint(0, len(ethicsArray) - 1)
+    number = random.randrange(len(ethicsArray))
     embed = discord.Embed(title = f"{number + 1}.", description = ethicsArray[number], color = myColor)
     await interaction.response.send_message(embed = embed)
 
@@ -464,7 +464,7 @@ async def advice(interaction: discord.Interaction):
         "Constantly remind your viewers that 'age is just a number.'",
         "Release your complete tax returns and long-form birth certificate on stream so the audience knows you're a red-blooded American."
     ]
-    number = random.randint(0, len(adviceArray) - 1)
+    number = random.randrange(len(adviceArray))
     embed = discord.Embed(title = f"{number + 1}.", description = adviceArray[number], color = myColor)
     await interaction.response.send_message(embed = embed)
 
