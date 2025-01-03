@@ -74,7 +74,6 @@ async def snitch(interaction: discord.Interaction):
     embed.set_image(url = interaction.user.avatar.url)
     await aspynUser.send(embed = embed)
 
-#TODO make an optional "visible" parameter on every command, default to ephemeral?
 #TODO currency conversions (ephemeral)
 #TODO doesthedogdie?
 
@@ -152,20 +151,22 @@ class SystemViews(discord.ui.View):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ping",description="ping")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message("h", ephemeral = True)
+    await interaction.response.send_message("h", ephemeral =True)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="counter",description="counter")
-async def counter(interaction: discord.Interaction):
-    await interaction.response.send_message("0", ephemeral = True, view = CounterButton())
+@app_commands.describe(visible="Visible to others?")
+async def counter(interaction: discord.Interaction, visible: bool = False):
+    await interaction.response.send_message("0", ephemeral = not visible, view = CounterButton())
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="anime",description="My Anime List")
-async def anime(interaction: discord.Interaction):
+@app_commands.describe(visible="Visible to others?")
+async def anime(interaction: discord.Interaction, visible: bool = False):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
@@ -173,19 +174,20 @@ async def anime(interaction: discord.Interaction):
     embed.add_field(name = "Mean Rating", value = "8.64")
     embed.add_field(name = "My Rating", value = "10")
     embed.set_image(url = "https://cdn.myanimelist.net/images/anime/1405/143284l.webp")
-    await interaction.response.send_message(embed = embed, ephemeral = False, view = AnimeSelector())
+    await interaction.response.send_message(embed = embed, ephemeral = not visible, view = AnimeSelector())
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="system",description="My System!")
-async def system(interaction: discord.Interaction):
+@app_commands.describe(visible="Visible to others?")
+async def system(interaction: discord.Interaction, visible: bool = False):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
     embed = discord.Embed(title = "Pearlescence System", description = "Welcome to my system index! Use the dropdown below to select a headmate, and the buttons to flip through their images!\nQuestions are more than welcome, please don't be scared to ask!\nNote: Messages by any member other than aspyn will be proxy tagged with the first letter of their name.", color = myColor)
     embed.add_field(name = "Resources", value = "[More Than One](<https://morethanone.info/>)\n[Pluralpedia](<https://pluralpedia.org/w/Plurality>)")
-    await interaction.response.send_message(embed = embed, view = SystemViews())
+    await interaction.response.send_message(embed = embed, view = SystemViews(), ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
@@ -203,19 +205,20 @@ async def sync(interaction: discord.Interaction):
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="pronouns",description="Pronouns... woke")
-async def pronouns(interaction: discord.Interaction):
+@app_commands.describe(visible="Visible to others?")
+async def pronouns(interaction: discord.Interaction, visible: bool = False):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
     embed = discord.Embed(title = "Pronouns", color = myColor, url = "https://en.pronouns.page/@aspyn")
     embed.set_image(url = "attachment://pronouns.png")
-    await interaction.response.send_message(embed = embed, file = discord.File('assets/pronouns.png'))
+    await interaction.response.send_message(embed = embed, file = discord.File('assets/pronouns.png'), ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="uid",description="Send UID")
-@app_commands.describe(game="Which UID?")
+@app_commands.describe(game="Which UID?", visible="Visible to others?")
 @app_commands.choices(game=[
         app_commands.Choice(name="Genshin", value="609006374"),
         app_commands.Choice(name="Honkai Star Rail", value="604969370"),
@@ -227,44 +230,46 @@ async def pronouns(interaction: discord.Interaction):
         #TODO add switch fc
     ]
 )
-async def uid(interaction: discord.Interaction, game: app_commands.Choice[str]):
+async def uid(interaction: discord.Interaction, game: app_commands.Choice[str], visible: bool = False):
     if await sus(interaction.user.id):
         await vote(interaction)
         return
     embed = discord.Embed(title = f"{game.name} UID", description = game.value, color = myColor)
-    await interaction.response.send_message(embed = embed)
+    await interaction.response.send_message(embed = embed, ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="pfp",description="Get PFP")
-@app_commands.describe(user="Whose PFP?")
-async def pfp(interaction: discord.Interaction, user: discord.User):
+@app_commands.describe(user="Whose PFP?", visible="Visible to others?")
+async def pfp(interaction: discord.Interaction, user: discord.User, visible: bool = False):
     embed = discord.Embed(title = f"{user.name}'s PFP", color = myColor)
     embed.set_image(url = user.avatar.url)
-    await interaction.response.send_message(embed = embed, ephemeral = True)
+    await interaction.response.send_message(embed = embed, ephemeral = not visible)
+
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="roll",description="Roll Dice!")
-@app_commands.describe(dicestring="Dice Expression")
-async def roll(interaction: discord.Interaction, dicestring: str):
+@app_commands.describe(dicestring="Dice Expression", visible="Visible to others?")
+async def roll(interaction: discord.Interaction, dicestring: str, visible: bool = False):
     try:
         result = str(d20.roll(dicestring))
     except: 
         await interaction.response.send_message("Invalid Expression", ephemeral = True)
         return
-    await interaction.response.send_message(result)
+    await interaction.response.send_message(result, ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="rollchar",description="Roll a Character!")
-async def rollchar(interaction: discord.Interaction):
+@app_commands.describe(visible="Visible to others?")
+async def rollchar(interaction: discord.Interaction, visible: bool = False):
     result = ""
     for i in range(6):
         result += f"{d20.roll("4d6rr1kh3")}\n"
-    await interaction.response.send_message(result)
+    await interaction.response.send_message(result, ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
@@ -279,7 +284,7 @@ async def rollhelp(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
-@tree.context_menu(name="fixfiles")
+@tree.context_menu(name="fixfilespub")
 async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     await interaction.response.defer()
     images = []
@@ -316,11 +321,52 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     else:
         await interaction.followup.send("No files to fix")
 
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.context_menu(name="fixfiles")
+async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
+    await interaction.response.defer(ephemeral = True)
+    images = []
+    hardware = path.exists("/dev/dri/renderD128")
+    params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h='min(720,iw)':format=nv12", "-c:v", "h264_vaapi", "-b:v", "1M"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:'min(720,iw)'"]
+
+    for attachment in message.attachments:
+        extension = ""
+        attachment_data = await attachment.read()
+        mime = magic.from_buffer(attachment_data, mime = True).split("/")
+        contentType = mime[0]
+        contentExtension = mime[1]
+        match contentType:
+            case "image":
+                if contentExtension == "gif":
+                    continue
+                command = ["ffmpeg", "-i", "pipe:0", "-f", "image2", "pipe:1"]
+                extension = "jpg"
+            case "video":
+                command = ["ffmpeg", "-i", "pipe:0", *params, "-c:a", "aac", "-pix_fmt", "yuv420p", "-movflags", "frag_keyframe+empty_moov+faststart", "-f", "mp4", "pipe:1"]
+                extension = "mp4"
+            case "audio":
+                command = ["ffmpeg", "-i", "pipe:0", "-loop", "1", "-r", "10", "-i", "assets/sus.webp", "-shortest", *params, "-c:a", "aac", "-pix_fmt", "yuv420p", "-movflags", "frag_keyframe+empty_moov+faststart", "-f", "mp4", "pipe:1"]
+                extension = "mp4"
+            case _:
+                continue
+
+        process = run(command, input = attachment_data, stdout = PIPE)
+        if process.returncode == 0:
+            discord_file = discord.File(fp = BytesIO(process.stdout), filename = f"{attachment.filename.split(".")[0]}.{extension}")
+            images.append(discord_file)
+    if len(images) > 0:
+        await interaction.followup.send(files = images)
+    else:
+        await interaction.followup.send("No files to fix")
+
+
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="temperature",description="Convert Temperatures")
-@app_commands.describe(input="Input amount and units (with a space)")
-async def roll(interaction: discord.Interaction, input: str):
+@app_commands.describe(input="Input amount and units (with a space)", visible="Visible to others?")
+async def roll(interaction: discord.Interaction, input: str, visible: bool = False):
     input.lower()
     inputArray = input.split()
     tempNum = float(inputArray[0])
@@ -340,13 +386,14 @@ async def roll(interaction: discord.Interaction, input: str):
     outputString += f"{tempInF:.1f} Degrees Fahrenheit\n"
     outputString += f"{(tempInF - 32) / 1.8:.1f} Degrees Celsius\n"
     embed = discord.Embed(title = "Temperature Conversion", description = outputString, color = myColor)
-    await interaction.response.send_message(embed = embed, ephemeral = True)
+    await interaction.response.send_message(embed = embed, ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="ethics",description="Code of Ethics :3")
-async def ethics(interaction: discord.Interaction):
+@app_commands.describe(visible="Visible to others?")
+async def ethics(interaction: discord.Interaction, visible: bool = False):
     ethicsArray = [
         "First of all, love the Lord God with your whole heart, your whole soul, and your whole strength.",
         "Then, love your neighbor as yourself.",
@@ -423,13 +470,14 @@ async def ethics(interaction: discord.Interaction):
     ]
     number = random.randrange(len(ethicsArray))
     embed = discord.Embed(title = f"{number + 1}.", description = ethicsArray[number], color = myColor)
-    await interaction.response.send_message(embed = embed)
+    await interaction.response.send_message(embed = embed, ephemeral = not visible)
 
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="advice",description="Advice for Budding Streamers")
-async def advice(interaction: discord.Interaction):
+@app_commands.describe(visible="Visible to others?")
+async def advice(interaction: discord.Interaction, visible: bool = False):
     adviceArray = [
         "Be kind and wholesome; positivity is inherently contagious.",
         "Be yourself, but be measured: people want authenticity, but too much feels like therapy.",
@@ -466,7 +514,7 @@ async def advice(interaction: discord.Interaction):
     ]
     number = random.randrange(len(adviceArray))
     embed = discord.Embed(title = f"{number + 1}.", description = adviceArray[number], color = myColor)
-    await interaction.response.send_message(embed = embed)
+    await interaction.response.send_message(embed = embed, ephemeral = not visible)
 
 @client.event
 async def on_ready():
