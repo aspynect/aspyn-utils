@@ -300,6 +300,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
         match contentType:
             case "image":
                 if contentExtension == "gif":
+                    images.append(discord.File(fp = BytesIO(attachment_data), filename = f"{attachment.filename.split(".")[0]}.gif"))
                     continue
                 command = ["ffmpeg", "-i", "pipe:0", "-f", "image2", "pipe:1"]
                 extension = "jpg"
@@ -340,6 +341,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
         match contentType:
             case "image":
                 if contentExtension == "gif":
+                    images.append(discord.File(fp = BytesIO(attachment_data), filename = f"{attachment.filename.split(".")[0]}.gif"))
                     continue
                 command = ["ffmpeg", "-i", "pipe:0", "-f", "image2", "pipe:1"]
                 extension = "jpg"
