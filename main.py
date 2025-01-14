@@ -167,9 +167,6 @@ async def counter(interaction: discord.Interaction, visible: bool = False):
 @tree.command(name="anime",description="My Anime List")
 @app_commands.describe(visible="Visible to others?")
 async def anime(interaction: discord.Interaction, visible: bool = False):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     embed = discord.Embed(title = "Shigatsu wa Kimi no Uso", description = "Your Lie in April", color = myColor, url = "https://myanimelist.net/anime/23273")
     embed.add_field(name = "Mean Rating", value = "8.64")
     embed.add_field(name = "My Rating", value = "10")
@@ -182,9 +179,6 @@ async def anime(interaction: discord.Interaction, visible: bool = False):
 @tree.command(name="system",description="My System!")
 @app_commands.describe(visible="Visible to others?")
 async def system(interaction: discord.Interaction, visible: bool = False):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     embed = discord.Embed(title = "Pearlescence System", description = "Welcome to my system index! Use the dropdown below to select a headmate, and the buttons to flip through their images!\nQuestions are more than welcome, please don't be scared to ask!\nNote: Messages by any member other than aspyn will be proxy tagged with the first letter of their name.", color = myColor)
     embed.add_field(name = "Resources", value = "[More Than One](<https://morethanone.info/>)\n[Pluralpedia](<https://pluralpedia.org/w/Plurality>)")
     await interaction.response.send_message(embed = embed, view = SystemViews(), ephemeral = not visible)
@@ -207,9 +201,6 @@ async def sync(interaction: discord.Interaction):
 @tree.command(name="pronouns",description="Pronouns... woke")
 @app_commands.describe(visible="Visible to others?")
 async def pronouns(interaction: discord.Interaction, visible: bool = False):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     embed = discord.Embed(title = "Pronouns", color = myColor, url = "https://en.pronouns.page/@aspyn")
     embed.set_image(url = "attachment://pronouns.png")
     await interaction.response.send_message(embed = embed, file = discord.File('assets/pronouns.png'), ephemeral = not visible)
@@ -231,9 +222,6 @@ async def pronouns(interaction: discord.Interaction, visible: bool = False):
     ]
 )
 async def uid(interaction: discord.Interaction, game: app_commands.Choice[str], visible: bool = False):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     embed = discord.Embed(title = f"{game.name} UID", description = game.value, color = myColor)
     await interaction.response.send_message(embed = embed, ephemeral = not visible)
 
@@ -276,9 +264,6 @@ async def rollchar(interaction: discord.Interaction, visible: bool = False):
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.command(name="rollhelp",description="Link to d20 docs")
 async def rollhelp(interaction: discord.Interaction):
-    if await sus(interaction.user.id):
-        await vote(interaction)
-        return
     await interaction.response.send_message("https://github.com/avrae/d20?tab=readme-ov-file#operators", ephemeral = True)
 
 
