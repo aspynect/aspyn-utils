@@ -201,7 +201,7 @@ async def sync(interaction: discord.Interaction):
 @tree.command(name="pronouns",description="Pronouns... woke")
 @app_commands.describe(visible="Visible to others?")
 async def pronouns(interaction: discord.Interaction, visible: bool = False):
-    embed = discord.Embed(title = "Pronouns", color = myColor, url = "https://en.pronouns.page/@aspyn")
+    embed = discord.Embed(title = "Pronouns", color = myColor, url = "https://pronouns.cc/@aspyn")
     embed.set_image(url = "attachment://pronouns.png")
     await interaction.response.send_message(embed = embed, file = discord.File('assets/pronouns.png'), ephemeral = not visible)
 
