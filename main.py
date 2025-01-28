@@ -269,6 +269,13 @@ async def rollhelp(interaction: discord.Interaction):
 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+@tree.command(name="echo",description="echo")
+async def echo(interaction: discord.Interaction, echostring: str, visible: bool = False):
+    await interaction.response.send_message(echostring, ephemeral = not visible)
+
+
+@app_commands.allowed_installs(guilds=True, users=True)
+@app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @tree.context_menu(name="fixfilespub")
 async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     await interaction.response.defer()
