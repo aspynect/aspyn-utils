@@ -214,6 +214,7 @@ async def pronouns(interaction: discord.Interaction, visible: bool = False):
         app_commands.Choice(name="Genshin", value="609006374"),
         app_commands.Choice(name="Honkai Star Rail", value="604969370"),
         app_commands.Choice(name="Valorant", value="gwenny#itgrl"),
+        app_commands.Choice(name="League of Legends", value="XxJynxFan300xX#JYNX"),
         app_commands.Choice(name="Steam", value="883076786"),
         app_commands.Choice(name="Pokemon Go", value="545621393895"),
         app_commands.Choice(name="Pokemon TCG Pocket", value="6220292429679699"),
