@@ -231,9 +231,10 @@ async def uid(interaction: discord.Interaction, game: app_commands.Choice[str], 
 @app_commands.allowed_installs(guilds=True, users=True)
 @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
 @app_commands.describe(user="Whose PFP?", visible="Visible to others?")
-async def pfp(interaction: discord.Interaction, user: discord.User, visible: bool = False):
+async def pfp(interaction: discord.Interaction, user: discord.User, visible: bool = False, server: bool = True):
     embed = discord.Embed(title = f"{user.name}'s PFP", color = myColor)
-    embed.set_image(url = user.avatar.url)
+    image = user.display_avatar.url if server else user.avatar.url
+    embed.set_image(url = image)
     await interaction.response.send_message(embed = embed, ephemeral = not visible)
 
 
