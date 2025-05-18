@@ -1,5 +1,6 @@
 import discord
 from discord import app_commands
+from os import getenv
 import json
 import random
 import d20
@@ -14,16 +15,18 @@ myColor = discord.Color.from_rgb(r=255, g=0, b=255)
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
-with open('secrets.json', 'r') as file:
-    secrets = json.load(file)
-headmatesList = ["aspyn", "Cassie", "Shane", "Ruth", "nea", "Pearl"]
+
+DISCORD_TOKEN = getenv("DISCORD_TOKEN", "NO TOKEN PROVIDED")
+MAL_TOKEN = getenv("MAL_TOKEN", "NO TOKEN PROVIDED")
+# optional env var
+HEADMATES_LIST = getenv("HEADMATES_LIST", "aspyn,Cassie,Shane,Ruth,nea,Pearl").split(",")
 
 class Anime():
     def __init__(self):
         self.animeInfo = self.getAnimeList()
     
     def getAnimeList(self):
-        response = requests.get("https://api.myanimelist.net/v2/users/aspynect/animelist?status=completed&sort=list_score&limit=25&fields=id,title,mean,main_picture,list_status,alternative_titles", headers = {'X-MAL-CLIENT-ID': secrets["mal-token"]})
+        response = requests.get("https://api.myanimelist.net/v2/users/aspynect/animelist?status=completed&sort=list_score&limit=25&fields=id,title,mean,main_picture,list_status,alternative_titles", headers = {'X-MAL-CLIENT-ID': MAL_TOKEN})
         response.raise_for_status()
         anime_list = response.json()
         response.close()
@@ -121,10 +124,10 @@ class SystemViews(discord.ui.View):
         embed.set_footer(text = f"Image {self.imageIndex + 1}/{len(member["images"])}")
         await interaction.response.edit_message(embed = embed, attachments = [discord.File(member["images"][self.imageIndex], filename = "image.webp")])
 
-    @discord.ui.select(placeholder = "Select a headmate", options = [discord.SelectOption(label = headmatesList[i], value = i) for i in range(len(headmatesList))], max_values=1)
+    @discord.ui.select(placeholder = "Select a headmate", options = [discord.SelectOption(label = HEADMATES_LIST[i], value = i) for i in range(len(HEADMATES_LIST))], max_values=1)
     async def headmateSelector(self, interaction: discord.Interaction, select: discord.ui.Select):
         self.imageIndex = 0
-        self.currentMember = headmatesList[int(select.values[0])]
+        self.currentMember = HEADMATES_LIST[int(select.values[0])]
         await self.buildAndSend(interaction)
 
     @discord.ui.button(label = "←")
@@ -516,4 +519,4 @@ async def advice(interaction: discord.Interaction, visible: bool = False):
 async def on_ready():
     print("Ready!")
 
-client.run(secrets["token"])
+client.run(DISCORD_TOKEN)
