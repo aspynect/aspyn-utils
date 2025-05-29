@@ -111,6 +111,7 @@ class CounterButton(discord.ui.View):
 class SystemViews(discord.ui.View):
     def __init__(self):
         super().__init__()
+        self.timeout = None
         self.imageIndex = 0
         with open('system.json', 'r') as file:
             self.infoDict = json.load(file)
