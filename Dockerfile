@@ -2,6 +2,8 @@
 FROM python:3.13
 WORKDIR /app
 
+RUN apt-get update -qq && apt-get install ffmpeg -y
+
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
