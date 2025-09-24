@@ -78,6 +78,14 @@ async def snitch(interaction: discord.Interaction):
     embed.set_image(url = interaction.user.avatar.url)
     await aspynUser.send(embed = embed)
 
+
+async def dmLog(command: str, *logs: list[str]):
+    aspynUser = await client.fetch_user(439441145466978305)
+    embed = discord.Embed(title = "Bot log: ", color = myColor)
+    for log in logs:
+        embed.add_field(name = "a", value = log)
+    await aspynUser.send(embed = embed)
+
 #TODO currency conversions (ephemeral)
 #TODO doesthedogdie?
 
@@ -289,13 +297,18 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     images = []
     hardware = path.exists("/dev/dri/renderD128")
     params = ["-vaapi_device", "/dev/dri/renderD128", "-vf", "hwupload,scale_vaapi=w=-2:h='min(720,iw)':format=nv12", "-c:v", "h264_vaapi", "-b:v", "1M"] if hardware else ["-c:v", "h264", "-vf", "scale=-2:'min(720,iw)'"]
+    mimes = []
 
     for attachment in message.attachments:
         extension = ""
         attachment_data = await attachment.read()
         mime = magic.from_buffer(attachment_data, mime = True).split("/")
+        mimes.append(mime)
         contentType = mime[0]
         contentExtension = mime[1]
+        if contentExtension == "mp4":
+            images.append(await attachment.to_file(filename = f"{attachment.filename.split(".")[0]}.mp4"))
+            continue
         match contentType:
             case "image":
                 if contentExtension == "gif":
@@ -320,6 +333,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
         await interaction.followup.send(files = images)
     else:
         await interaction.followup.send("No files to fix")
+        await dmLog("fixfilespub", [f"{hardware = }", f"{mimes = }"])
 
 
 @tree.context_menu(name="fixfiles")
@@ -337,6 +351,9 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
         mime = magic.from_buffer(attachment_data, mime = True).split("/")
         contentType = mime[0]
         contentExtension = mime[1]
+        if contentExtension == "mp4":
+            images.append(await attachment.to_file(filename = f"{attachment.filename.split(".")[0]}.mp4"))
+            continue
         match contentType:
             case "image":
                 if contentExtension == "gif":
@@ -361,6 +378,7 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
         await interaction.followup.send(files = images)
     else:
         await interaction.followup.send("No files to fix")
+        await dmLog("fixfilespub", [f"{hardware = }", f"{mime = }"])
 
 
 @tree.command(name="temperature",description="Convert Temperatures")
