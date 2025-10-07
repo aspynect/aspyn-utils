@@ -136,7 +136,7 @@ class SystemViews(discord.ui.View):
         embed.set_footer(text = f"Image {self.imageIndex + 1}/{len(member["images"])}")
         await interaction.response.edit_message(embed = embed, attachments = [discord.File(member["images"][self.imageIndex], filename = "image.webp")])
 
-    @discord.ui.select(placeholder = "Select a headmate", options = [discord.SelectOption(label = HEADMATES_LIST[i], value = i) for i in range(len(HEADMATES_LIST))], max_values=1)
+    @discord.ui.select(placeholder = "Select a headmate", options = [discord.SelectOption(label=l, value=i) for i, l in enumerate(HEADMATES_LIST)], max_values=1)
     async def headmateSelector(self, interaction: discord.Interaction, select: discord.ui.Select):
         self.imageIndex = 0
         self.currentMember = HEADMATES_LIST[int(select.values[0])]
