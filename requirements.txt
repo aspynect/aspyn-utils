@@ -3,3 +3,4 @@ discord.py==2.5.2
 python-magic==0.4.27
 requests==2.32.3
 num2words==0.5.14
+sqlitedict==2.1.0

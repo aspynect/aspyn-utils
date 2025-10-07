@@ -10,12 +10,14 @@ from os import path
 from subprocess import run, PIPE
 import magic
 from num2words import num2words
+from sqlitedict import SqliteDict
 
 
 myColor = discord.Color.from_rgb(r=255, g=0, b=255)
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
+remindersDB = SqliteDict("data/reminders.db")
 
 DISCORD_TOKEN = getenv("DISCORD_TOKEN", "NO TOKEN PROVIDED")
 MAL_TOKEN = getenv("MAL_TOKEN", "NO TOKEN PROVIDED")
@@ -379,6 +381,36 @@ async def fixfiles(interaction: discord.Interaction,  message: discord.Message):
     else:
         await interaction.followup.send("No files to fix")
         await dmLog("fixfilespub", [f"{hardware = }", f"{mime = }"])
+
+
+@tree.context_menu(name="remind")
+@app_commands.allowed_installs(guilds=False, users=True)
+@app_commands.allowed_contexts(guilds=False, dms=True, private_channels=True)
+async def remind(interaction: discord.Interaction,  message: discord.Message):
+    #TODO continue doing this stuff
+    newReminder = f"{message.content} | https://discord.com/channels/@me/{interaction.channel_id}/{message.id}\n"
+    reminders = []
+    if interaction.channel_id in remindersDB:
+        reminders += remindersDB[interaction.channel_id]
+    reminders += [newReminder]
+    remindersDB[interaction.channel_id] = reminders
+    remindersDB.commit()
+    await interaction.response.send_message(f"reminder added: {newReminder}", ephemeral=True)
+
+
+@tree.command(name="reminders",description="Get reminders for current dm and clear reminders")
+@app_commands.allowed_installs(guilds=False, users=True)
+@app_commands.allowed_contexts(guilds=False, dms=True, private_channels=True)
+async def reminders(interaction: discord.Interaction):
+    if reminders := remindersDB.pop(interaction.channel_id, []):
+        outputString = ""
+        for reminder in reminders:
+            outputString += f"{reminder}\n"
+        await interaction.response.send_message(outputString)
+        remindersDB.commit()
+        return
+    await interaction.response.send_message("No reminders for this chat", ephemeral=True)
+
 
 
 @tree.command(name="temperature",description="Convert Temperatures")
